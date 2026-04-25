@@ -6,7 +6,8 @@ from inline_markdown import (
     extract_markdown_images,
     extract_markdown_links,
     split_nodes_link,
-    split_nodes_image
+    split_nodes_image,
+    text_to_textnodes
     )
 
 class TestSplitNodesDelimiter(unittest.TestCase):
@@ -88,5 +89,21 @@ class TestSplitNodesDelimiter(unittest.TestCase):
             ],
             new_nodes,
         )
+
+    def test_text_to_text_nodes(self):
+        node = "Let me _test_ this **cool** system I made [link](https://test.com)"
+        new_nodes = text_to_textnodes(node)
+        self.assertListEqual(
+            [
+                TextNode("Let me ", TextType.TEXT),
+                TextNode("test", TextType.ITALIC),
+                TextNode(" this ", TextType.TEXT),
+                TextNode("cool", TextType.BOLD),
+                TextNode(" system I made ", TextType.TEXT),
+                TextNode("link", TextType.LINK, "https://test.com")
+            ],
+            new_nodes,
+        )
+        
 if __name__ == "__main__":
     unittest.main()
